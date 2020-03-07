@@ -8231,23 +8231,19 @@ try {
 
   const githubUsername = github.context.actor;
   const repositoryName = github.context.repo.repo;
-  const repositoryBranch = github.context.ref;
+  const repositoryBranch = github.context.ref.split("/").pop();
 
   const successText = `Built and deployed successfully: ${deployedProjectUrl}`;
   const failureText = `Build failed...`;
-  const cancelledText = `Build cancelled`;
 
-  let color = "good";
-  let text = `**${repositoryName}** | ${repositoryBranch} | triggered by **${githubUsername}**\n`;
+  let color = "danger";
+  let text = `*${repositoryName}* | ${repositoryBranch} | triggered by *${githubUsername}*\n`;
 
-  if (jobStatus === "failure") {
-    color = "danger";
-    text += failureText;
-  } else if (jobStatus === "cancelled") {
-    color = "warning";
-    text += cancelledText;
-  } else {
+  if (jobStatus === "success") {
+    color = "good";
     text += successText;
+  } else {
+    text += failureText;
   }
 
   const body = {
