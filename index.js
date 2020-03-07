@@ -7,7 +7,7 @@ try {
   const jobStatus = core.getInput("job-status");
   const deployedProjectUrl = core.getInput("deployed-project-url");
 
-  console.log(job.status);
+  console.log(jobStatus);
 
   const githubUsername = github.context.actor;
   const repositoryName = github.context.repo.repo;
