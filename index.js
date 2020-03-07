@@ -4,10 +4,8 @@ const axios = require("axios");
 
 try {
   const slackWebhook = core.getInput("slack-webhook");
-  const jobStatus = core.getInput("job-status");
+  const jobStatus = core.getInput("job-status").toLowerCase();
   const deployedProjectUrl = core.getInput("deployed-project-url");
-
-  console.log(jobStatus);
 
   const githubUsername = github.context.actor;
   const repositoryName = github.context.repo.repo;
