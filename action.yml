@@ -1,0 +1,15 @@
+name: "Slack Deploy Notification"
+description: "Send a message on Slack when a project has been deployed"
+inputs:
+  slack-webhook:
+    description: "Slack webhook URL"
+    required: true
+  job-status:
+    description: "Status of the job"
+    required: true
+  deployed-project-url:
+    description: "URL of the deployed project"
+    required: true
+runs:
+  using: "node12"
+  main: "dist/index.js"
