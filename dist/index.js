@@ -8234,16 +8234,20 @@ try {
   const repositoryBranch = github.context.ref.split("/").pop();
 
   const successText = `Built and deployed successfully: ${deployedProjectUrl}`;
+  const cancelledText = `Build cancelled.`;
   const failureText = `Build failed...`;
 
-  let color = "danger";
+  let color = "good";
   let text = `*${repositoryName}* | ${repositoryBranch} | triggered by *${githubUsername}*\n`;
 
-  if (jobStatus === "success") {
-    color = "good";
-    text += successText;
-  } else {
+  if (jobStatus === "failure") {
+    color = "danger";
     text += failureText;
+  } else if (jobStatus === "cancelled") {
+    color = "warning";
+    text += cancelledText;
+  } else {
+    text += successText;
   }
 
   const body = {
