@@ -10,7 +10,6 @@ try {
   const githubUsername = github.context.actor;
   const repositoryBranch = github.context.ref.split("/").pop();
   const { owner, repo } = github.context.repo;
-  const { sha } = github.context.sha;
 
   const successText = `Built and deployed successfully: ${deployedProjectUrl}`;
   const cancelledText = `Build cancelled.`;
@@ -29,10 +28,24 @@ try {
     text += successText;
   }
 
-  const commitUrl = `https://github.com/${owner}/${repo}/commit/${sha}`;
-  const actionUrl = commitUrl + "/checks";
+  let sha = null;
 
-  text += `\n<${actionUrl}|Action> | <${commitUrl}|Commit>`;
+  if (typeof github.context.sha !== "undefined") {
+    sha = github.context.sha;
+  } else if (
+    typeof github.context.payload.pull_request !== "undefined" &&
+    typeof github.context.payload.pull_request.head !== "undefined" &&
+    typeof github.context.payload.pull_request.head.sha !== "undefined"
+  ) {
+    sha = github.context.payload.pull_request.head.sha;
+  }
+
+  if (sha !== null && typeof sha !== "undefined") {
+    const commitUrl = `https://github.com/${owner}/${repo}/commit/${sha}`;
+    const actionUrl = commitUrl + "/checks";
+
+    text += `\n<${actionUrl}|Action> | <${commitUrl}|Commit>`;
+  }
 
   const body = {
     attachments: [
