@@ -47,23 +47,8 @@ try {
     text += `\n<${actionUrl}|Action> | <${commitUrl}|Commit>`;
   }
 
-  let envText = "Development";
-  let envColor = "#f542ad";
-
-  if (repositoryBranch === "staging") {
-    envText = "Staging";
-    envColor = "#bf42f5";
-  } else if (repositoryBranch === "master") {
-    envText = "Production";
-    envColor = "#4287f5";
-  }
-
   const body = {
     attachments: [
-      {
-        text: envText,
-        color: envColor
-      },
       {
         color,
         text
