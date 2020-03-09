@@ -8,15 +8,16 @@ try {
   const deployedProjectUrl = core.getInput("deployed-project-url");
 
   const githubUsername = github.context.actor;
-  const repositoryName = github.context.repo.repo;
   const repositoryBranch = github.context.ref.split("/").pop();
+  const { owner, repo } = github.context.repo;
+  const { sha } = github.context.sha;
 
   const successText = `Built and deployed successfully: ${deployedProjectUrl}`;
   const cancelledText = `Build cancelled.`;
   const failureText = `Build failed...`;
 
   let color = "good";
-  let text = `*${repositoryName}* | ${repositoryBranch} | triggered by *${githubUsername}*\n`;
+  let text = `*${repo}* | ${repositoryBranch} | triggered by *${githubUsername}*\n`;
 
   if (jobStatus === "failure") {
     color = "danger";
@@ -27,6 +28,11 @@ try {
   } else {
     text += successText;
   }
+
+  const commitUrl = `https://github.com/${owner}/${repo}/commit/${sha}`;
+  const actionUrl = commitUrl + "/checks";
+
+  text += `\n<${actionUrl}|Action> | <${commitUrl}|Commit>`;
 
   const body = {
     attachments: [
