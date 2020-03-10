@@ -10,6 +10,15 @@ inputs:
   deployed-project-url:
     description: "URL of the deployed project"
     required: true
+  manual-deploy:
+    description: "Does the deployment require manual action"
+    default: "false"
+  manual-deploy-url:
+    description: "URL to show for manual deployment"
+    default: ""
+  manual-deploy-label:
+    description: "Label for manual deploy URL"
+    default: "Manual deployment URL"
 runs:
   using: "node12"
   main: "dist/index.js"

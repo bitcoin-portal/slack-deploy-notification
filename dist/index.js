@@ -8228,12 +8228,20 @@ try {
   const slackWebhook = core.getInput("slack-webhook");
   const jobStatus = core.getInput("job-status").toLowerCase();
   const deployedProjectUrl = core.getInput("deployed-project-url");
+  const isManualDeploy = core.getInput("manual-deploy") === "true";
+  const manualDeployUrl = core.getInput("manual-deploy-url");
+  const manualDeployLabel = core.getInput("manual-deploy-label");
 
   const githubUsername = github.context.actor;
   const repositoryBranch = github.context.ref.split("/").pop();
   const { owner, repo } = github.context.repo;
 
-  const successText = `Built and deployed successfully: ${deployedProjectUrl}`;
+  let successText = `Built and deployed successfully: ${deployedProjectUrl}`;
+
+  if (isManualDeploy === true) {
+    successText = `Built successfully! Will be available at ${deployedProjectUrl} after manual deployment.`;
+  }
+
   const cancelledText = `Build cancelled.`;
   const failureText = `Build failed...`;
 
@@ -8267,6 +8275,11 @@ try {
     const actionUrl = commitUrl + "/checks";
 
     text += `\n<${actionUrl}|Action> | <${commitUrl}|Commit>`;
+
+    if (isManualDeploy === true && jobStatus === "success") {
+      text += ` | <${manualDeployUrl}|${manualDeployLabel}>`;
+      text += `\nCommit hash: *${sha}*`;
+    }
   }
 
   const body = {
