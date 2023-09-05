@@ -20,5 +20,5 @@ inputs:
     description: "Label for manual deploy URL"
     default: "Manual deployment URL"
 runs:
-  using: "node12"
+  using: 'node16'
   main: "dist/index.js"
